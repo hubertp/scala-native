@@ -12,16 +12,11 @@ import nir._
 import NirPrimitives._
 
 abstract class NirGenPhase
-    extends PluginComponent
+    extends NirPhase
     with NirGenStat
     with NirGenExpr
     with NirGenUtil
-    with NirGenFile
-    with NirGenType
-    with NirGenName {
-  val nirAddons: NirGlobalAddons {
-    val global: NirGenPhase.this.global.type
-  }
+    with NirGenFile {
 
   import global._
   import definitions._

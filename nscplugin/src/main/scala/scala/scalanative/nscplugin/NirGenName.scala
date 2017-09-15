@@ -5,7 +5,7 @@ import scala.tools.nsc._
 import scala.reflect.internal.Flags._
 import scalanative.util.unreachable
 
-trait NirGenName { self: NirGenPhase =>
+trait NirGenName { self: NirPhase =>
   import global.{Name => _, _}, definitions._
   import nirAddons.nirDefinitions._
   import SimpleType.{fromSymbol, fromType}

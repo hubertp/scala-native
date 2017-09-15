@@ -14,11 +14,18 @@ lazy val baseSettings = Seq(
 )
 
 addCommandAlias(
-  "rebuild",
+  "clean-all",
   Seq(
     "clean",
     "cleanCache",
-    "cleanLocal",
+    "cleanLocal"
+  ).mkString(";", ";", "")
+)
+
+addCommandAlias(
+  "rebuild",
+  Seq(
+    "clean-all",
     "dirty-rebuild"
   ).mkString(";", ";", "")
 )

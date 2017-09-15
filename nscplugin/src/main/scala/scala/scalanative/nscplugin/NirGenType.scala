@@ -3,7 +3,7 @@ package nscplugin
 
 import util._
 
-trait NirGenType { self: NirGenPhase =>
+trait NirGenType { self: NirPhase =>
   import global._
   import definitions._
   import nirAddons._
