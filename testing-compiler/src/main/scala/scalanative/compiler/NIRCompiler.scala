@@ -1,7 +1,7 @@
 package scala.scalanative
 
 import scala.reflect.internal.util.{BatchSourceFile, NoFile, SourceFile}
-import scala.reflect.internal.util.Position
+import scala.reflect.internal.util.{Position, NoPosition}
 
 import scala.tools.cmd.CommandLineParser
 import scala.tools.nsc.{CompilerCommand, Global, Settings}
@@ -95,7 +95,13 @@ class NIRCompiler(outputDir: File) extends api.NIRCompiler {
       private var errors0: List[(Position, String)] = Nil
       def handleError(pos: Position, msg: String): Unit =
         errors0 = (pos, msg) :: errors0
-      def errors: List[api.CompilerError] = errors0.map { case (p, msg) => CompilerError(p.startOrPoint, msg) }
+      def errors: List[api.CompilerError] =
+        errors0.map {
+          case (p, msg) if p == NoPosition =>
+            CompilerError(0, msg)
+          case (p, msg) =>
+            CompilerError(p.startOrPoint, msg)
+        }
 
     }
 
