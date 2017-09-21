@@ -85,8 +85,6 @@ trait NirGenExpr { self: NirGenPhase =>
         genAssign(tree)
       case tree: Typed =>
         genTyped(tree)
-      case tree: Function =>
-        genFunction(tree)
       case tree: ApplyDynamic =>
         genApplyDynamic(tree)
       case tree: Apply =>
@@ -566,9 +564,6 @@ trait NirGenExpr { self: NirGenPhase =>
       case Typed(expr, _) =>
         genExpr(expr)
     }
-
-    def genFunction(tree: Function): Val =
-      unsupported(tree)
 
     def genApplyDynamic(app: ApplyDynamic): Val = {
       val ApplyDynamic(obj, args) = app
@@ -1493,6 +1488,8 @@ trait NirGenExpr { self: NirGenPhase =>
     def genApplyNew(app: Apply): Val = {
       val Apply(fun @ Select(New(tpt), nme.CONSTRUCTOR), args) = app
 
+      println("Generate new? " + app + " of " + SimpleType.fromType(tpt.tpe) + s" in ${tpt.tpe.getClass} " + tpt.tpe.normalize)
+      println("APP? " + app.tpe + " " + fun.tpe.resultType.getClass)
       SimpleType.fromType(tpt.tpe) match {
         case SimpleType(ArrayClass, Seq(targ)) =>
           genApplyNewArray(genPrimCode(targ), args)
@@ -1503,7 +1500,7 @@ trait NirGenExpr { self: NirGenPhase =>
         case st @ SimpleType(UByteClass | UIntClass | UShortClass | ULongClass,
                              Seq())
             // We can't just compare the curClassSym with RuntimeBoxesModule
-            // as it's not the same when you're actually compiling Boxes module.
+            // as it's not the same when you're actually compiling Bes module.
             if curClassSym.fullName.toString != "scala.scalanative.runtime.Boxes" =>
           genApplyBox(st, args.head)
 
@@ -1511,6 +1508,7 @@ trait NirGenExpr { self: NirGenPhase =>
           genApplyNew(cls, fun.symbol, args)
 
         case SimpleType(sym, targs) =>
+          // we are after erasure, this cannot happen?
           unsupported(s"unexpected new: $sym with targs $targs")
       }
     }
