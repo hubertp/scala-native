@@ -1488,8 +1488,6 @@ trait NirGenExpr { self: NirGenPhase =>
     def genApplyNew(app: Apply): Val = {
       val Apply(fun @ Select(New(tpt), nme.CONSTRUCTOR), args) = app
 
-      println("Generate new? " + app + " of " + SimpleType.fromType(tpt.tpe) + s" in ${tpt.tpe.getClass} " + tpt.tpe.normalize)
-      println("APP? " + app.tpe + " " + fun.tpe.resultType.getClass)
       SimpleType.fromType(tpt.tpe) match {
         case SimpleType(ArrayClass, Seq(targ)) =>
           genApplyNewArray(genPrimCode(targ), args)

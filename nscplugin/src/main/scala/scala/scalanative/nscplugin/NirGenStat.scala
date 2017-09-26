@@ -230,26 +230,6 @@ trait NirGenStat { self: NirGenPhase =>
       }
     }
 
-    def validateExternCtor(rhs: Tree): Unit = {
-      val Block(_ +: init, _) = rhs
-      val externs = init.flatMap {
-        case Assign(ref: RefTree, Apply(extern, Seq()))
-            if extern.symbol == ExternMethod =>
-          Some(ref.symbol)
-        case _ =>
-          //unsupported(
-          //  "extern objects may only contain " + "extern fields and methods")
-          None
-      }.toSet
-      for {
-        f <- curClassSym.info.decls if f.isField
-        if !externs.contains(f)
-      } {
-        ()
-        //unsupported("extern objects may only contain extern fields")
-      }
-    }
-
     def genMethodAttrs(sym: Symbol): Attrs = {
       val inlineAttrs = {
         if (sym.hasFlag(ACCESSOR)) {

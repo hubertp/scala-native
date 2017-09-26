@@ -3,7 +3,7 @@ package nscplugin
 
 import scalanative.util.unsupported
 
-trait NirGenUtil { self: NirGenPhase =>
+trait NirGenUtil { self: NirPhase =>
   import global._
   import definitions._
   import nirAddons._
