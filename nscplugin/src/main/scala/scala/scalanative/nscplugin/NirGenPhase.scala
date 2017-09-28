@@ -56,7 +56,6 @@ abstract class NirGenPhase
   class NirCodePhase(prev: Phase) extends StdPhase(prev) {
     override def run(): Unit = {
       scalaPrimitives.init()
-      nirPrimitives.init()
       super.run()
     }
 
